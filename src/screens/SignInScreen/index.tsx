@@ -17,6 +17,10 @@ import {
 } from "./styles";
 
 export const SignInScreen = () => {
+  const handleSignInPressed = () => {
+    console.log("Clicou para conectar-se!");
+  };
+
   return (
     <ScrollView>
       <HighlightText />
@@ -33,7 +37,10 @@ export const SignInScreen = () => {
             </ChangePasswordButton>
           </ChangePasswordButtonContainer>
 
-          <SubmitButton title="Login" onSubmitButtonClick={() => {}} />
+          <SubmitButton
+            title="Login"
+            onSubmitButtonClick={handleSignInPressed}
+          />
         </Form>
       </AuthContainer>
 

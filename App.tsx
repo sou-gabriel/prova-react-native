@@ -1,14 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { View } from "react-native";
+import { Routes } from "./src/routes";
 
-import { SignUpScreen } from "./src/screens/SignUpScreen";
+import { SignInScreen } from "./src/screens/SignInScreen";
 
 export default function App() {
   return (
-    <View>
-      <SignUpScreen />
+    <>
+      <Routes />
       <StatusBar style="auto" />
-    </View>
+    </>
   );
 }
