@@ -15,7 +15,7 @@ export const Button = styled.TouchableOpacity`
 `;
 
 export const Text = styled.Text`
-  margin-right: ${RFValue(8)}px;
+  margin: 0 ${RFValue(8)}px;
   font-style: italic;
   font-weight: bold;
   font-size: ${RFValue(36)}px;
