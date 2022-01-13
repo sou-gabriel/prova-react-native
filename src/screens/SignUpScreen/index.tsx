@@ -19,7 +19,7 @@ export const SignUpScreen = () => {
         <Form>
           <Input placeholder="Name" />
           <Input placeholder="E-mail" />
-          <Input placeholder="Password" />
+          <Input placeholder="Password" secureTextEntry />
 
           <SubmitButton title="Register" onSubmitButtonClick={() => {}} />
         </Form>

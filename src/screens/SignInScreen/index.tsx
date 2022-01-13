@@ -25,7 +25,7 @@ export const SignInScreen = () => {
         <Title>Authentication</Title>
         <Form>
           <Input placeholder="E-mail" />
-          <Input placeholder="Password" />
+          <Input placeholder="Password" secureTextEntry />
 
           <ChangePasswordButtonContainer>
             <ChangePasswordButton>
