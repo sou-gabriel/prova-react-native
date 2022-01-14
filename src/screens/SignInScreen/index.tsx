@@ -1,11 +1,18 @@
-import React from "react";
-import { ScrollView } from "react-native";
+import React, { useEffect, useCallback } from "react";
+import { ScrollView, ActivityIndicator } from "react-native";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ParamListBase } from "@react-navigation/native";
 
 import { HighlightText } from "../../components/HighlightText";
 import { Input } from "../../components/Form/Input";
 import { SubmitButton } from "../../components/Form/SubmitButton";
 import { RedirectButton } from "../../components/RedirectButton";
 import { Footer } from "../../components/Footer";
+import { IRootState } from "../../store/modules/rootReducer";
 
 import {
   AuthContainer,
@@ -15,11 +22,50 @@ import {
   ChangePasswordButton,
   ChangePasswordText,
 } from "./styles";
+import { createLoginAction } from "../../store/modules/user/actions";
 
-export const SignInScreen = () => {
-  const handleSignInPressed = () => {
-    console.log("Clicou para conectar-se!");
-  };
+interface IUserData {
+  email: string;
+  password: string;
+}
+
+const schema = Yup.object().shape({
+  email: Yup.string()
+    .email("Campo de e-mail inválido")
+    .required("O campo de e-mail é obrigatório"),
+  password: Yup.string().min(6, "É necessário pelo menos 6 caracteres"),
+});
+
+export const SignInScreen = ({
+  navigation,
+}: NativeStackScreenProps<ParamListBase>) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+  const dispatch = useDispatch();
+  const userToken = useSelector((state: IRootState) => state.user.token);
+
+  const onUserLogin = useCallback(async (userData: IUserData) => {
+    dispatch(createLoginAction(userData));
+  }, []);
+
+  useEffect(() => {
+    let timerId: ReturnType<typeof setTimeout>;
+
+    if (userToken) {
+      timerId = setTimeout(() => {
+        navigation.navigate("Home");
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [userToken]);
 
   return (
     <ScrollView>
@@ -28,8 +74,21 @@ export const SignInScreen = () => {
       <AuthContainer>
         <Title>Authentication</Title>
         <Form>
-          <Input placeholder="E-mail" />
-          <Input placeholder="Password" secureTextEntry />
+          <Input
+            name="email"
+            control={control}
+            placeholder="Email"
+            autoCorrect={false}
+            error={errors.email && errors.email.message}
+          />
+          <Input
+            name="password"
+            control={control}
+            placeholder="Password"
+            autoCorrect={false}
+            secureTextEntry
+            error={errors.password && errors.password.message}
+          />
 
           <ChangePasswordButtonContainer>
             <ChangePasswordButton>
@@ -37,10 +96,7 @@ export const SignInScreen = () => {
             </ChangePasswordButton>
           </ChangePasswordButtonContainer>
 
-          <SubmitButton
-            title="Login"
-            onSubmitButtonClick={handleSignInPressed}
-          />
+          <SubmitButton title="Login" onPress={handleSubmit(onUserLogin)} />
         </Form>
       </AuthContainer>
 

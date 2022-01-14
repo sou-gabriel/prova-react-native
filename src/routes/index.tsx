@@ -1,17 +1,18 @@
-/*
-  Se o usuário estiver autenticado renderizar as rotas "AppRoutes",
-  mas se o usuário não estiver autenticado renderizar as rotas "AuthRoutes".
-*/
-
 import { NavigationContainer } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 import { AuthRoutes } from "./auth.routes";
 import { AppRoutes } from "./app.routes";
+import { IRootState } from "../store/modules/rootReducer";
 
 export const Routes = () => {
+  const isAnAuthenticatedUser = useSelector(
+    ({ user }: IRootState) => user.token
+  );
+
   return (
     <NavigationContainer>
-      <AuthRoutes />
+      {isAnAuthenticatedUser ? <AppRoutes /> : <AuthRoutes />}
     </NavigationContainer>
   );
 };
