@@ -33,7 +33,9 @@ const schema = Yup.object().shape({
   email: Yup.string()
     .email("Campo de e-mail inválido")
     .required("O campo de e-mail é obrigatório"),
-  password: Yup.string().min(6, "É necessário pelo menos 6 caracteres"),
+  password: Yup.string()
+    .min(6, "É necessário pelo menos 6 caracteres")
+    .required("O campo de senha é obrigatório"),
 });
 
 export const SignInScreen = ({
