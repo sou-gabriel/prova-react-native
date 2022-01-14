@@ -1,15 +1,15 @@
 import React from "react";
+import { TouchableOpacityProps } from "react-native";
 
 import { Container, Text, Icon } from "./styles";
 
-interface ISubmitButton {
+interface ISubmitButton extends TouchableOpacityProps {
   title: string;
-  onSubmitButtonClick: () => void;
 }
 
-export const SubmitButton = ({ title, onSubmitButtonClick }: ISubmitButton) => {
+export const SubmitButton = ({ title, ...rest }: ISubmitButton) => {
   return (
-    <Container onPress={onSubmitButtonClick}>
+    <Container {...rest}>
       <Text>{title}</Text>
       <Icon name="arrowright" />
     </Container>
