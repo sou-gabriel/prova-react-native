@@ -54,17 +54,9 @@ export const SignInScreen = ({
   }, []);
 
   useEffect(() => {
-    let timerId: ReturnType<typeof setTimeout>;
-
     if (userToken) {
-      timerId = setTimeout(() => {
-        navigation.navigate("Home");
-      }, 2000);
+      navigation.navigate("Home");
     }
-
-    return () => {
-      clearTimeout(timerId);
-    };
   }, [userToken]);
 
   return (
