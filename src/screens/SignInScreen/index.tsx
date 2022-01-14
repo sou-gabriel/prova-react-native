@@ -94,7 +94,7 @@ export const SignInScreen = ({
 
       <RedirectButton
         title="Sign Up"
-        onRedirectButtonClick={() => {}}
+        onRedirectButtonClick={() => navigation.navigate("SignUp")}
         arrowDirection="right"
       />
 
