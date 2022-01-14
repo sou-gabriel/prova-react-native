@@ -1,14 +1,14 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Routes } from "./src/routes";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { SignInScreen } from "./src/screens/SignInScreen";
+import { Routes } from "./src/routes";
 
 export default function App() {
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <Routes />
       <StatusBar style="auto" />
-    </>
+    </SafeAreaView>
   );
 }
