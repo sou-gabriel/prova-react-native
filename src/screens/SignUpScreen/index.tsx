@@ -1,6 +1,9 @@
-import React, { useCallback } from "react";
-import { ScrollView } from "react-native";
+import React, { useCallback, useContext } from "react";
+import { Alert, ScrollView } from "react-native";
 import { useForm } from "react-hook-form";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ParamListBase } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
@@ -9,6 +12,8 @@ import { Input } from "../../components/Form/Input";
 import { SubmitButton } from "../../components/Form/SubmitButton";
 import { RedirectButton } from "../../components/RedirectButton";
 import { Footer } from "../../components/Footer";
+import { createUser } from "../../shared/services/user";
+import { TokenContext } from "../../shared/context/Token";
 
 import { AuthContainer, Title, Form } from "./styles";
 
@@ -28,7 +33,10 @@ const schema = Yup.object().shape({
   password: Yup.string().min(6, "É necessário pelo menos 6 caracteres"),
 });
 
-export const SignUpScreen = () => {
+export const SignUpScreen = (props: NativeStackScreenProps<ParamListBase>) => {
+  const { navigation } = props
+
+  const { setToken } = useContext(TokenContext)
   const {
     control,
     handleSubmit,
@@ -37,8 +45,18 @@ export const SignUpScreen = () => {
     resolver: yupResolver(schema),
   });
 
-  const onUserRegister = useCallback((data: IUserData) => {
-    console.log(data);
+  const onUserRegister = useCallback(async (userData: IUserData) => {
+    try {
+      const { data } = await createUser(userData)
+      const token = data.token.token
+
+      setToken(token)
+      AsyncStorage.setItem('token', token)
+      navigation.navigate('Home')
+    } catch (error) {
+      console.log(error)
+      Alert.alert(error.name, error.message)
+    }
   }, []);
 
   return (
