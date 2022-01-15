@@ -57,7 +57,6 @@ export const SignInScreen = (props: NativeStackScreenProps<ParamListBase>) => {
     try {
       const { data } = await login(userData);
       const token = data.token.token;
-<<<<<<< HEAD
 
       await AsyncStorage.setItem("token", token);
       autoLogin(token);
@@ -73,20 +72,6 @@ export const SignInScreen = (props: NativeStackScreenProps<ParamListBase>) => {
         autoLogin(token);
       }
     });
-=======
-
-      await AsyncStorage.setItem("token", token);
-      setToken(token);
-      navigation.navigate("Home");
-    } catch (error) {
-      console.log(error);
-      Alert.alert(error.name, error.message);
-    }
-  }, []);
-
-  useEffect(() => {
-    AsyncStorage.getItem("token").then((token) => autoLogin(token));
->>>>>>> 89f0476b7b90f0fc5984c3126269b0f1aa4bff4c
   }, []);
 
   return (
