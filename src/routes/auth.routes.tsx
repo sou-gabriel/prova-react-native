@@ -5,10 +5,11 @@ const { Navigator, Screen } = createNativeStackNavigator();
 
 import { SignInScreen } from "../screens/SignInScreen";
 import { SignUpScreen } from "../screens/SignUpScreen";
+import { HomeScreen } from "../screens/HomeScreen";
 
 export const AuthRoutes = () => {
   return (
-    <Navigator>
+    <Navigator initialRouteName="SignIn">
       <Screen
         name="SignIn"
         component={SignInScreen}
@@ -23,6 +24,7 @@ export const AuthRoutes = () => {
           headerShown: false,
         }}
       />
+      <Screen name="Home" component={HomeScreen} />
     </Navigator>
   );
 };

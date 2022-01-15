@@ -1,18 +1,16 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Provider } from "react-redux";
 
 import { Routes } from "./src/routes";
-import store from "./src/store";
+import { TokenProvider } from "./src/shared/context/Token";
 
 export default function App() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Provider store={store}>
+      <TokenProvider>
         <Routes />
-      </Provider>
-
+      </TokenProvider>
       <StatusBar style="auto" />
     </SafeAreaView>
   );

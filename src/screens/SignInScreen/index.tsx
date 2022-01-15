@@ -1,18 +1,19 @@
-import React, { useEffect, useCallback } from "react";
-import { ScrollView } from "react-native";
+import React, { useCallback, useContext, useEffect } from "react";
+import { ScrollView, Alert } from "react-native";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/native";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { HighlightText } from "../../components/HighlightText";
 import { Input } from "../../components/Form/Input";
 import { SubmitButton } from "../../components/Form/SubmitButton";
 import { RedirectButton } from "../../components/RedirectButton";
 import { Footer } from "../../components/Footer";
-import { IRootState } from "../../store/modules/rootReducer";
+import { login } from "../../shared/services/auth";
+import { TokenContext } from "../../shared/context/Token";
 
 import {
   AuthContainer,
@@ -22,7 +23,6 @@ import {
   ChangePasswordButton,
   ChangePasswordText,
 } from "./styles";
-import { createLoginAction } from "../../store/modules/user/actions";
 
 interface IUserData {
   email: string;
@@ -38,28 +38,38 @@ const schema = Yup.object().shape({
     .required("O campo de senha é obrigatório"),
 });
 
-export const SignInScreen = ({
-  navigation,
-}: NativeStackScreenProps<ParamListBase>) => {
+export const SignInScreen = (props: NativeStackScreenProps<ParamListBase>) => {
+  const { navigation } = props;
+
+  const { setToken } = useContext(TokenContext);
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
-  const dispatch = useDispatch();
-  const userToken = useSelector((state: IRootState) => state.user.token);
+  } = useForm({ resolver: yupResolver(schema) });
+
+  const autoLogin = (token: string) => {
+    setToken(token);
+    navigation.navigate("Home");
+  };
 
   const onUserLogin = useCallback(async (userData: IUserData) => {
-    dispatch(createLoginAction(userData));
+    try {
+      const { data } = await login(userData);
+      const token = data.token.token;
+
+      await AsyncStorage.setItem("token", token);
+      setToken(token);
+      navigation.navigate("Home");
+    } catch (error) {
+      console.log(error);
+      Alert.alert(error.name, error.message);
+    }
   }, []);
 
   useEffect(() => {
-    if (userToken) {
-      navigation.navigate("Home");
-    }
-  }, [userToken]);
+    AsyncStorage.getItem("token").then((token) => autoLogin(token));
+  }, []);
 
   return (
     <ScrollView>

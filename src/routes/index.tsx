@@ -1,18 +1,16 @@
+import { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { useSelector } from "react-redux";
 
 import { AuthRoutes } from "./auth.routes";
 import { AppRoutes } from "./app.routes";
-import { IRootState } from "../store/modules/rootReducer";
+import { TokenContext } from "../shared/context/Token";
 
 export const Routes = () => {
-  const isAnAuthenticatedUser = useSelector(
-    ({ user }: IRootState) => user.token
-  );
+  const { token } = useContext(TokenContext)
 
   return (
     <NavigationContainer>
-      {isAnAuthenticatedUser ? <AppRoutes /> : <AuthRoutes />}
+      {token ? <AppRoutes /> : <AuthRoutes />}
     </NavigationContainer>
   );
 };
