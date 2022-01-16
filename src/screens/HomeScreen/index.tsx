@@ -1,21 +1,17 @@
 import React from "react";
 
+import { Header } from "../../components/Header";
+import { GameTypeButton } from "../../components/GameTypeButton";
 import { SavedBet } from "../../components/SavedBet";
 import { Empty } from "../../components/Empty";
 import { Footer } from "../../components/Footer";
 
 import {
-  Header,
-  LogoContainer,
-  Logo,
-  HorizontalLine,
   Content,
   ContentHeader,
   Title,
   FiltersContainer,
   GameFiltersButtonsContainer,
-  GameFilterButton,
-  GameFilterButtonText,
   SavedBetsContainer,
 } from "./styles";
 
@@ -32,21 +28,17 @@ export const HomeScreen = () => {
         <FiltersContainer>
           <Title>Filters</Title>
           <GameFiltersButtonsContainer>
-            <GameFilterButton color="#7F3992">
-              <GameFilterButtonText color="#7F3992">
-                Lotofácil
-              </GameFilterButtonText>
-            </GameFilterButton>
-
-            <GameFilterButton color="#01AC66">
-              <GameFilterButtonText color="#01AC66">
-                Mega-Sena
-              </GameFilterButtonText>
-            </GameFilterButton>
-
-            <GameFilterButton color="#F79C31">
-              <GameFilterButtonText color="#F79C31">Quina</GameFilterButtonText>
-            </GameFilterButton>
+            <GameTypeButton
+              theme="#7F3992"
+              title="Lotofácil"
+              onPress={() => {}}
+            />
+            <GameTypeButton
+              theme="#01AC66"
+              title="Mega-Sena"
+              onPress={() => {}}
+            />
+            <GameTypeButton theme="#F79C31" title="Quina" onPress={() => {}} />
           </GameFiltersButtonsContainer>
         </FiltersContainer>
 
