@@ -5,17 +5,19 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { HomeScreen } from "../screens/HomeScreen";
 import { DashboardScreen } from "../screens/DashboardScreen";
 import { AccountScreen } from "../screens/AccountScreen";
+import { CartScreen } from "../screens/CartScreen";
 
-const Tab = createBottomTabNavigator();
+const { Navigator, Screen } = createBottomTabNavigator();
 
 const icons = {
   Home: "home",
   Dashboard: "dashboard",
   Account: "account-circle",
+  Cart: "shopping-cart",
 };
 
 export const AppRoutes = () => (
-  <Tab.Navigator
+  <Navigator
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused }) => {
         const iconColor = focused ? "#fff" : "#000";
@@ -32,8 +34,19 @@ export const AppRoutes = () => (
       headerShown: false,
     })}
   >
-    <Tab.Screen name="Home" component={HomeScreen} />
-    <Tab.Screen name="Dashboard" component={DashboardScreen} />
-    <Tab.Screen name="Account" component={AccountScreen} />
-  </Tab.Navigator>
+    <Screen name="Home" component={HomeScreen} />
+    <Screen name="Dashboard" component={DashboardScreen} />
+    <Screen
+      name="Cart"
+      component={CartScreen}
+      options={{
+        tabBarBadge: 1,
+        tabBarBadgeStyle: {
+          backgroundColor: "#b5c401",
+          color: "#fff",
+        },
+      }}
+    />
+    <Screen name="Account" component={AccountScreen} />
+  </Navigator>
 );
