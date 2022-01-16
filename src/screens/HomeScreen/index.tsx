@@ -22,12 +22,7 @@ import {
 export const HomeScreen = () => {
   return (
     <>
-      <Header>
-        <LogoContainer>
-          <Logo>TGL</Logo>
-          <HorizontalLine />
-        </LogoContainer>
-      </Header>
+      <Header />
 
       <Content>
         <ContentHeader>
