@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeScreen } from "../screens/HomeScreen";
 import { DashboardScreen } from "../screens/DashboardScreen";
 
-const { Navigator, Screen } = createNativeStackNavigator()
+const { Navigator, Screen } = createNativeStackNavigator();
 
 export const AppRoutes = () => {
   return (
@@ -12,5 +12,5 @@ export const AppRoutes = () => {
       <Screen name="Home" component={HomeScreen} />
       <Screen name="Dashboard" component={DashboardScreen} />
     </Navigator>
-  )
-}
+  );
+};

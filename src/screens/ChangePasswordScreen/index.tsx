@@ -11,24 +11,26 @@ import { Input } from "../../components/Form/Input";
 import { SubmitButton } from "../../components/Form/SubmitButton";
 import { RedirectButton } from "../../components/RedirectButton";
 import { Footer } from "../../components/Footer";
-import { useAuth } from "../../shared/hooks/useAuth";
+import { changePassword } from "../../shared/services/auth";
+import { showError } from "../../shared/functions";
 
 import { AuthContainer, Title, Form } from "./styles";
 
+interface IUserData {
+  password: string;
+}
+
 const schema = Yup.object().shape({
-  name: Yup.string()
-    .min(3, "O mínímo é 3 caracteres.")
-    .required("O nome de usuário é obrigatório"),
-  email: Yup.string()
-    .email("Campo de e-mail inválido")
-    .required("O campo de e-mail é obrigatório"),
-  password: Yup.string().min(6, "É necessário pelo menos 6 caracteres"),
+  password: Yup.string()
+    .min(6, "É necessário pelo menos 6 caracteres")
+    .required("O campo de senha é obrigatório"),
 });
 
-export const SignUpScreen = ({
-  navigation,
-}: NativeStackScreenProps<ParamListBase>) => {
-  const { onUserRegister } = useAuth();
+export const ChangePasswordScreen = (
+  props: NativeStackScreenProps<ParamListBase>
+) => {
+  const { navigation, route } = props;
+
   const {
     control,
     handleSubmit,
@@ -37,39 +39,38 @@ export const SignUpScreen = ({
     resolver: yupResolver(schema),
   });
 
+  const onChangePassword = async (userData: IUserData) => {
+    try {
+      const token = (route.params as { token: string }).token;
+      const response = await changePassword(userData, token);
+
+      if (response.status === 200) {
+        navigation.navigate("SignIn");
+      }
+    } catch (error) {
+      showError(error);
+    }
+  };
+
   return (
     <ScrollView>
       <HighlightText />
 
       <AuthContainer>
-        <Title>Registration</Title>
+        <Title>Reset Password</Title>
         <Form>
-          <Input
-            name="name"
-            control={control}
-            placeholder="Name"
-            autoCorrect={false}
-            error={errors.name && errors.name.message}
-          />
-          <Input
-            name="email"
-            control={control}
-            placeholder="E-mail"
-            autoCorrect={false}
-            error={errors.email && errors.email.message}
-          />
           <Input
             name="password"
             control={control}
             placeholder="Password"
             autoCorrect={false}
-            error={errors.password && errors.password.message}
+            error={errors.email && errors.email.message}
             secureTextEntry
           />
 
           <SubmitButton
-            title="Register"
-            onPress={handleSubmit(onUserRegister)}
+            title="Submit"
+            onPress={handleSubmit(onChangePassword)}
           />
         </Form>
       </AuthContainer>

@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useEffect } from "react";
-import { ScrollView, Alert } from "react-native";
+import React from "react";
+import { ScrollView } from "react-native";
 import { useForm } from "react-hook-form";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/native";
@@ -12,8 +12,7 @@ import { Input } from "../../components/Form/Input";
 import { SubmitButton } from "../../components/Form/SubmitButton";
 import { RedirectButton } from "../../components/RedirectButton";
 import { Footer } from "../../components/Footer";
-import { login } from "../../shared/services/auth";
-import { TokenContext } from "../../shared/context/Token";
+import { useAuth } from "../../shared/hooks/useAuth";
 
 import {
   AuthContainer,
@@ -24,11 +23,6 @@ import {
   ChangePasswordText,
 } from "./styles";
 
-interface IUserData {
-  email: string;
-  password: string;
-}
-
 const schema = Yup.object().shape({
   email: Yup.string()
     .email("Campo de e-mail inválido")
@@ -38,41 +32,17 @@ const schema = Yup.object().shape({
     .required("O campo de senha é obrigatório"),
 });
 
-export const SignInScreen = (props: NativeStackScreenProps<ParamListBase>) => {
-  const { navigation } = props;
-
-  const { setToken } = useContext(TokenContext);
+export const SignInScreen = ({
+  navigation,
+}: NativeStackScreenProps<ParamListBase>) => {
+  const { onUserLogin } = useAuth();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const autoLogin = (token: string) => {
-    setToken(token);
-    navigation.navigate("Home");
-  };
-
-  const onUserLogin = useCallback(async (userData: IUserData) => {
-    try {
-      const { data } = await login(userData);
-      const token = data.token.token;
-
-      await AsyncStorage.setItem("token", token);
-      autoLogin(token);
-    } catch (error) {
-      console.log(error);
-      Alert.alert(error.name, error.message);
-    }
-  }, []);
-
-  useEffect(() => {
-    AsyncStorage.getItem("token").then((token) => {
-      if (token !== null) {
-        autoLogin(token);
-      }
-    });
-  }, []);
+  AsyncStorage.clear();
 
   return (
     <ScrollView>
@@ -98,7 +68,9 @@ export const SignInScreen = (props: NativeStackScreenProps<ParamListBase>) => {
           />
 
           <ChangePasswordButtonContainer>
-            <ChangePasswordButton>
+            <ChangePasswordButton
+              onPress={() => navigation.navigate("ForgotPassword")}
+            >
               <ChangePasswordText>I forgot my password</ChangePasswordText>
             </ChangePasswordButton>
           </ChangePasswordButtonContainer>
