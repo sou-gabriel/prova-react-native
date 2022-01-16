@@ -6,7 +6,7 @@ import { AppRoutes } from "./app.routes";
 import { TokenContext } from "../shared/context/Token";
 
 export const Routes = () => {
-  const { token } = useContext(TokenContext)
+  const { token } = useContext(TokenContext);
 
   return (
     <NavigationContainer>

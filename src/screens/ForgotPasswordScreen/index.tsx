@@ -16,19 +16,15 @@ import { useAuth } from "../../shared/hooks/useAuth";
 import { AuthContainer, Title, Form } from "./styles";
 
 const schema = Yup.object().shape({
-  name: Yup.string()
-    .min(3, "O mínímo é 3 caracteres.")
-    .required("O nome de usuário é obrigatório"),
   email: Yup.string()
     .email("Campo de e-mail inválido")
     .required("O campo de e-mail é obrigatório"),
-  password: Yup.string().min(6, "É necessário pelo menos 6 caracteres"),
 });
 
-export const SignUpScreen = ({
+export const ForgotPasswordScreen = ({
   navigation,
 }: NativeStackScreenProps<ParamListBase>) => {
-  const { onUserRegister } = useAuth();
+  const { onResetPassword } = useAuth();
   const {
     control,
     handleSubmit,
@@ -42,15 +38,8 @@ export const SignUpScreen = ({
       <HighlightText />
 
       <AuthContainer>
-        <Title>Registration</Title>
+        <Title>Forgot Password</Title>
         <Form>
-          <Input
-            name="name"
-            control={control}
-            placeholder="Name"
-            autoCorrect={false}
-            error={errors.name && errors.name.message}
-          />
           <Input
             name="email"
             control={control}
@@ -58,18 +47,10 @@ export const SignUpScreen = ({
             autoCorrect={false}
             error={errors.email && errors.email.message}
           />
-          <Input
-            name="password"
-            control={control}
-            placeholder="Password"
-            autoCorrect={false}
-            error={errors.password && errors.password.message}
-            secureTextEntry
-          />
 
           <SubmitButton
-            title="Register"
-            onPress={handleSubmit(onUserRegister)}
+            title="Submit"
+            onPress={handleSubmit(onResetPassword)}
           />
         </Form>
       </AuthContainer>
