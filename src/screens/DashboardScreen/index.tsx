@@ -82,6 +82,10 @@ export const DashboardScreen = () => {
     setChosenGameNumbers(randomGameNumbers);
   };
 
+  const clearGame = () => {
+    setChosenGameNumbers([]);
+  };
+
   return (
     <ScrollView>
       <Header />
@@ -104,6 +108,7 @@ export const DashboardScreen = () => {
                     (gameType) => gameType.type === type
                   );
                   dispatch(setActiveGame(newActiveGame));
+                  clearGame();
                 }}
               />
             ))}
@@ -153,7 +158,7 @@ export const DashboardScreen = () => {
             <PrimaryActionButtonText>Complete Game</PrimaryActionButtonText>
           </PrimaryActionButton>
 
-          <PrimaryActionButton onPress={() => {}}>
+          <PrimaryActionButton onPress={clearGame}>
             <PrimaryActionButtonText>Clear Game</PrimaryActionButtonText>
           </PrimaryActionButton>
 
