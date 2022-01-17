@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Header } from "../../components/Header";
 import { GameTypeButton } from "../../components/GameTypeButton";
 import { Footer } from "../../components/Footer";
+import { CardNumber } from "../../components/CardNumber";
 import { AppDispatch, RootState } from "../../store";
 import { setActiveGame } from "../../store/features/activeGame/activeGameSlice";
 
