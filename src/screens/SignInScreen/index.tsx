@@ -42,8 +42,6 @@ export const SignInScreen = ({
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  AsyncStorage.clear();
-
   return (
     <ScrollView>
       <HighlightText />
