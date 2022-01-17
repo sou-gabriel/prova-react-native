@@ -63,6 +63,25 @@ export const DashboardScreen = () => {
     return numbers;
   };
 
+  const getRandomGameNumbers = () => {
+    const randomNumbers = [];
+
+    do {
+      const newRandomNumber = Math.round(Math.random() * range);
+
+      if (!randomNumbers.includes(newRandomNumber)) {
+        randomNumbers.push(newRandomNumber);
+      }
+    } while (randomNumbers.length !== max_number);
+
+    return randomNumbers;
+  };
+
+  const completeGame = () => {
+    const randomGameNumbers = getRandomGameNumbers();
+    setChosenGameNumbers(randomGameNumbers);
+  };
+
   return (
     <ScrollView>
       <Header />
@@ -130,7 +149,7 @@ export const DashboardScreen = () => {
         </GameNumberButtonsContainer>
 
         <ActionsContainer>
-          <PrimaryActionButton onPress={() => {}}>
+          <PrimaryActionButton onPress={completeGame}>
             <PrimaryActionButtonText>Complete Game</PrimaryActionButtonText>
           </PrimaryActionButton>
 
