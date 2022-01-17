@@ -40,15 +40,21 @@ export const Description = styled.Text`
   color: #868686;
 `;
 
-export const GameNumberButtonsContainer = styled.View`
-  flex-direction: row;
-  margin-bottom: ${RFValue(16)}px;
-`;
+export const GameNumberButtonsContainer = styled.FlatList.attrs({
+  contentContainerStyle: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: RFValue(16),
+    justifyContent: "space-between",
+  },
+})``;
 
 export const GameNumberButton = styled.TouchableOpacity`
   width: ${RFValue(60)}px;
   height: ${RFValue(60)}px;
   margin-right: ${RFValue(8)}px;
+  margin-bottom: ${RFValue(8)}px;
   background-color: #adc0c4;
   align-items: center;
   justify-content: center;
