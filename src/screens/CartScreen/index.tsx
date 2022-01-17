@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 
 import { Header } from "../../components/Header";
 import { Empty } from "../../components/Empty";
+import { CartBet } from "../../components/CartBet";
+import { Footer } from "../../components/Footer";
 import { RootState } from "../../store";
 
 import {
@@ -15,7 +17,6 @@ import {
   SubmitButtonText,
   SubmitButtonIcon,
 } from "./styles";
-import { SavedBet } from "../../components/SavedBet";
 
 export const CartScreen = () => {
   const bets = useSelector((state: RootState) => state.cart.bets);
@@ -34,8 +35,9 @@ export const CartScreen = () => {
               <FlatList
                 data={bets}
                 renderItem={({ item }) => (
-                  <SavedBet
+                  <CartBet
                     bet={{
+                      id: item.id,
                       color: item.color,
                       numbers: item.numbers,
                       date: item.date,
@@ -53,6 +55,8 @@ export const CartScreen = () => {
           <SubmitButtonIcon name="arrowright" />
         </SubmitButton>
       </Container>
+
+      <Footer />
     </>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ScrollView, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
+import Toast from "react-native-toast-message";
 
 import { Header } from "../../components/Header";
 import { GameTypeButton } from "../../components/GameTypeButton";
@@ -108,8 +109,14 @@ export const DashboardScreen = () => {
         }).format(price),
         date: new Intl.DateTimeFormat("pt-BR").format(new Date()),
       };
+
       dispatch(addBet(newBet));
       clearGame();
+      Toast.show({
+        type: "success",
+        text1: "Jogo adicionado com sucesso ao carrinho!",
+      });
+
       return;
     }
 
@@ -201,7 +208,17 @@ export const DashboardScreen = () => {
             <PrimaryActionButtonText>Complete Game</PrimaryActionButtonText>
           </PrimaryActionButton>
 
-          <PrimaryActionButton onPress={clearGame}>
+          <PrimaryActionButton
+            onPress={() => {
+              if (chosenGameNumbers.length > 0) {
+                clearGame();
+                Toast.show({
+                  type: "success",
+                  text1: "Cartela limpa com sucesso!",
+                });
+              }
+            }}
+          >
             <PrimaryActionButtonText>Clear Game</PrimaryActionButtonText>
           </PrimaryActionButton>
 

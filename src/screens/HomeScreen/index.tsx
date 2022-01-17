@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Header } from "../../components/Header";
 import { GameTypeButton } from "../../components/GameTypeButton";
-import { SavedBet } from "../../components/SavedBet";
 import { Empty } from "../../components/Empty";
 import { Footer } from "../../components/Footer";
 import { AppDispatch, RootState } from "../../store";

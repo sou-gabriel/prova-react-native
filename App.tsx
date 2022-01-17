@@ -1,6 +1,7 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import { Provider } from "react-redux";
 import "intl";
 import "intl/locale-data/jsonp/pt-BR";
@@ -15,6 +16,7 @@ export default function App() {
       <Provider store={store}>
         <TokenProvider>
           <Routes />
+          <Toast />
         </TokenProvider>
       </Provider>
       <StatusBar style="auto" />
