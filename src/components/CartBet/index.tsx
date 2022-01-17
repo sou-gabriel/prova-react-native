@@ -18,7 +18,7 @@ import {
   GameName,
 } from "./styles";
 
-interface ISavedBetProps {
+interface ICartBetProps {
   bet: {
     id: string;
     color: string;
@@ -29,7 +29,7 @@ interface ISavedBetProps {
   };
 }
 
-export const SavedBet = ({ bet }: ISavedBetProps) => {
+export const CartBet = ({ bet }: ICartBetProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   return (
