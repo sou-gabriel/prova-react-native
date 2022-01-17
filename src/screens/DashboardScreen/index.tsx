@@ -10,6 +10,7 @@ import { CardNumber } from "../../components/CardNumber";
 import { AppDispatch, RootState } from "../../store";
 import { setActiveGame } from "../../store/features/activeGame/activeGameSlice";
 import { addBet } from "../../store/features/cart/cartSlice";
+import { useGame } from "../../shared/hooks/useGame";
 
 import {
   Content,
@@ -47,94 +48,18 @@ export const DashboardScreen = () => {
   const games = useSelector(
     (state: RootState) => state.listGames as IListGames
   );
-  const { type, description, range, color, max_number, price } = useSelector(
+  const activeGame = useSelector(
     (state: RootState) => state.activeGame as IGameType
   );
   const dispatch = useDispatch<AppDispatch>();
-  const [chosenGameNumbers, setChosenGameNumbers] = useState<number[]>([]);
-
-  const createGameNumbers = () => {
-    const numbers: number[] = [];
-
-    for (let number = 1; number <= range; number++) {
-      numbers.push(number);
-    }
-
-    return numbers;
-  };
-
-  const getRandomGameNumbers = () => {
-    const randomNumbers = [];
-
-    do {
-      const newRandomNumber = Math.round(Math.random() * range);
-
-      if (!randomNumbers.includes(newRandomNumber)) {
-        randomNumbers.push(newRandomNumber);
-      }
-    } while (randomNumbers.length !== max_number);
-
-    return randomNumbers;
-  };
-
-  const completeGame = () => {
-    const randomGameNumbers = getRandomGameNumbers();
-    setChosenGameNumbers(randomGameNumbers);
-  };
-
-  const clearGame = () => {
-    setChosenGameNumbers([]);
-  };
-
-  const getPluralOrSinglar = (quantity, plural, singular) =>
-    quantity === 1 ? singular : plural;
-
-  const addToCart = () => {
-    if (chosenGameNumbers.length === max_number) {
-      const chosenGameNumbersCopy = chosenGameNumbers.map(
-        (chosenGameNumber) => chosenGameNumber
-      );
-      const chosenGameNumbersOrdered = chosenGameNumbersCopy.sort(
-        (a, b) => a - b
-      );
-
-      const newBet = {
-        id: String(new Date().getTime()),
-        type,
-        color,
-        numbers: chosenGameNumbersOrdered.join(", "),
-        price: new Intl.NumberFormat("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }).format(price),
-        date: new Intl.DateTimeFormat("pt-BR").format(new Date()),
-      };
-
-      dispatch(addBet(newBet));
-      clearGame();
-      Toast.show({
-        type: "success",
-        text1: "Jogo adicionado com sucesso ao carrinho!",
-      });
-
-      return;
-    }
-
-    const remainingNumbers = max_number - chosenGameNumbers.length;
-
-    Alert.alert(
-      "Não foi possível adicionar o jogo ao carrinho",
-      `Ainda restam ${remainingNumbers} ${getPluralOrSinglar(
-        remainingNumbers,
-        "numeros",
-        "numero"
-      )} a ${getPluralOrSinglar(
-        remainingNumbers,
-        "serem",
-        "ser"
-      )} ${getPluralOrSinglar(remainingNumbers, "selecionados", "selecionado")}`
-    );
-  };
+  const {
+    chosenNumbers,
+    setChosenNumbers,
+    getCardNumbers,
+    handleCompleteGame,
+    handleClearGame,
+    handleAddToCart,
+  } = useGame(activeGame);
 
   return (
     <ScrollView>
@@ -142,7 +67,7 @@ export const DashboardScreen = () => {
 
       <Content>
         <Title>
-          <Bold>New bet</Bold> for {type}
+          <Bold>New bet</Bold> for {activeGame.type}
         </Title>
 
         <ChooseGameContainer>
@@ -158,7 +83,6 @@ export const DashboardScreen = () => {
                     (gameType) => gameType.type === type
                   );
                   dispatch(setActiveGame(newActiveGame));
-                  clearGame();
                 }}
               />
             ))}
@@ -166,29 +90,27 @@ export const DashboardScreen = () => {
         </ChooseGameContainer>
 
         <Subtitle>Fill your bet</Subtitle>
-        <Description>{description}</Description>
+        <Description>{activeGame.description}</Description>
 
         <GameNumberButtonsContainer>
-          {createGameNumbers().map((gameNumber) => (
+          {getCardNumbers().map((gameNumber) => (
             <CardNumber
-              color={color}
+              color={activeGame.color}
               number={gameNumber}
-              isSelected={chosenGameNumbers.includes(gameNumber)}
+              isSelected={chosenNumbers.includes(gameNumber)}
               onPress={() => {
-                if (chosenGameNumbers.includes(gameNumber)) {
-                  setChosenGameNumbers((prevChosenGameNumbers) => {
-                    return prevChosenGameNumbers.filter(
-                      (prevChosenGameNumber) => {
-                        return prevChosenGameNumber !== gameNumber;
-                      }
-                    );
+                if (chosenNumbers.includes(gameNumber)) {
+                  setChosenNumbers((prevChosenNumbers) => {
+                    return prevChosenNumbers.filter((prevChosenNumber) => {
+                      return prevChosenNumber !== gameNumber;
+                    });
                   });
                   return;
                 }
 
-                if (chosenGameNumbers.length < max_number) {
-                  setChosenGameNumbers((prevChosenGameNumbers) => [
-                    ...prevChosenGameNumbers,
+                if (chosenNumbers.length < activeGame.max_number) {
+                  setChosenNumbers((prevChosenNumbers) => [
+                    ...prevChosenNumbers,
                     gameNumber,
                   ]);
                   return;
@@ -204,25 +126,15 @@ export const DashboardScreen = () => {
         </GameNumberButtonsContainer>
 
         <ActionsContainer>
-          <PrimaryActionButton onPress={completeGame}>
+          <PrimaryActionButton onPress={handleCompleteGame}>
             <PrimaryActionButtonText>Complete Game</PrimaryActionButtonText>
           </PrimaryActionButton>
 
-          <PrimaryActionButton
-            onPress={() => {
-              if (chosenGameNumbers.length > 0) {
-                clearGame();
-                Toast.show({
-                  type: "success",
-                  text1: "Cartela limpa com sucesso!",
-                });
-              }
-            }}
-          >
+          <PrimaryActionButton onPress={handleClearGame}>
             <PrimaryActionButtonText>Clear Game</PrimaryActionButtonText>
           </PrimaryActionButton>
 
-          <SecondaryActionButton onPress={addToCart}>
+          <SecondaryActionButton onPress={handleAddToCart}>
             <Icon name="cart-outline" />
             <SecondaryActionButtonText>Add to Cart</SecondaryActionButtonText>
           </SecondaryActionButton>
