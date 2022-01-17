@@ -40,7 +40,7 @@ export const Description = styled.Text`
   color: #868686;
 `;
 
-export const GameNumberButtonsContainer = styled.FlatList.attrs({
+export const GameNumberButtonsContainer = styled.ScrollView.attrs({
   contentContainerStyle: {
     flex: 1,
     flexDirection: "row",
@@ -49,23 +49,6 @@ export const GameNumberButtonsContainer = styled.FlatList.attrs({
     justifyContent: "space-between",
   },
 })``;
-
-export const GameNumberButton = styled.TouchableOpacity`
-  width: ${RFValue(60)}px;
-  height: ${RFValue(60)}px;
-  margin-right: ${RFValue(8)}px;
-  margin-bottom: ${RFValue(8)}px;
-  background-color: #adc0c4;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-`;
-
-export const GameNumberButtonText = styled.Text`
-  font-weight: bold;
-  font-size: ${RFValue(22)}px;
-  color: #fff;
-`;
 
 export const ActionsContainer = styled.View`
   flex-direction: row;
