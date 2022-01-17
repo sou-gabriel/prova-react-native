@@ -46,10 +46,11 @@ export const DashboardScreen = () => {
   const games = useSelector(
     (state: RootState) => state.listGames as IListGames
   );
-  const { type, description, range } = useSelector(
+  const { type, description, range, color, max_number } = useSelector(
     (state: RootState) => state.activeGame as IGameType
   );
   const dispatch = useDispatch<AppDispatch>();
+  const [chosenGameNumbers, setChosenGameNumbers] = useState<number[]>([]);
 
   const createGameNumbers = () => {
     const numbers: number[] = [];
@@ -92,17 +93,40 @@ export const DashboardScreen = () => {
         <Subtitle>Fill your bet</Subtitle>
         <Description>{description}</Description>
 
-        <GameNumberButtonsContainer
-          data={createGameNumbers()}
-          keyExtractor={(item) => String(item)}
-          renderItem={({ item }) => (
-            <GameNumberButton onPress={() => {}}>
-              <GameNumberButtonText>
-                {item < 9 ? `0${item}` : item}
-              </GameNumberButtonText>
-            </GameNumberButton>
-          )}
-        />
+        <GameNumberButtonsContainer>
+          {createGameNumbers().map((gameNumber) => (
+            <CardNumber
+              color={color}
+              number={gameNumber}
+              isSelected={chosenGameNumbers.includes(gameNumber)}
+              onPress={() => {
+                if (chosenGameNumbers.includes(gameNumber)) {
+                  setChosenGameNumbers((prevChosenGameNumbers) => {
+                    return prevChosenGameNumbers.filter(
+                      (prevChosenGameNumber) => {
+                        return prevChosenGameNumber !== gameNumber;
+                      }
+                    );
+                  });
+                  return;
+                }
+
+                if (chosenGameNumbers.length < max_number) {
+                  setChosenGameNumbers((prevChosenGameNumbers) => [
+                    ...prevChosenGameNumbers,
+                    gameNumber,
+                  ]);
+                  return;
+                }
+
+                Alert.alert(
+                  "Não é possível adicionar novos números",
+                  "Você já atingiu a quantidade máxima de números selecionados nesta cartela"
+                );
+              }}
+            />
+          ))}
+        </GameNumberButtonsContainer>
 
         <ActionsContainer>
           <PrimaryActionButton onPress={() => {}}>
