@@ -22,18 +22,22 @@ export const TrashIcon = styled(FontAwesome5)`
 
 export const VerticalLine = styled.View<ITheme>`
   width: ${RFValue(6)}px;
-  height: 100%;
+  height: 80%;
+  align-self: center;
   margin-right: ${RFValue(16)}px;
   border-radius: 999px;
   background-color: ${(props) => props.color};
 `;
 
 export const Content = styled.View`
+  flex: 1;
   padding: ${RFValue(8)}px 0;
   justify-content: center;
 `;
 
 export const Numbers = styled.Text`
+  flex: 1;
+  flex-wrap: wrap;
   margin-bottom: ${RFValue(8)}px;
   font-weight: bold;
   font-style: italic;

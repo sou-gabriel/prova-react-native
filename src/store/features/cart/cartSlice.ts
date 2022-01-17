@@ -9,6 +9,10 @@ interface IBet {
   price: string;
 }
 
+interface IBetToRemove {
+  id: string;
+}
+
 interface IState {
   bets: IBet[];
 }
@@ -25,10 +29,13 @@ export const cartSlice = createSlice({
       state.bets.unshift(action.payload);
       return state;
     },
-    removeBet() {},
+    removeBet(state, action: PayloadAction<IBetToRemove>) {
+      state.bets = state.bets.filter((bet) => bet.id !== action.payload.id);
+      return state;
+    },
   },
 });
 
-export const { addBet } = cartSlice.actions;
+export const { addBet, removeBet } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -4,6 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 export const Container = styled.View`
   width: ${RFPercentage(50)}px;
+  height: ${RFValue(400)}px;
   align-self: center;
   background-color: #fff;
   border-width: 2px;
@@ -15,6 +16,7 @@ export const Container = styled.View`
 
 export const Content = styled.View`
   padding: ${RFValue(24)}px;
+  flex: 1;
 `;
 
 export const Title = styled.Text`
@@ -26,7 +28,9 @@ export const Title = styled.Text`
 `;
 
 export const BetsContainer = styled.View`
-  margin: ${RFValue(32)}px 0;
+  margin: ${RFValue(8)}px 0;
+  justify-content: center;
+  flex: 1;
 `;
 
 export const SubmitButton = styled.TouchableOpacity`

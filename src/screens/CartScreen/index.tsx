@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList } from "react-native";
+import { ScrollView, FlatList } from "react-native";
 import { useSelector } from "react-redux";
 
 import { Header } from "../../components/Header";
@@ -16,6 +16,7 @@ import {
   SubmitButtonIcon,
 } from "./styles";
 import { SavedBet } from "../../components/SavedBet";
+import { Footer } from "../../components/Footer";
 
 export const CartScreen = () => {
   const bets = useSelector((state: RootState) => state.cart.bets);
@@ -36,6 +37,7 @@ export const CartScreen = () => {
                 renderItem={({ item }) => (
                   <SavedBet
                     bet={{
+                      id: item.id,
                       color: item.color,
                       numbers: item.numbers,
                       date: item.date,
@@ -53,6 +55,8 @@ export const CartScreen = () => {
           <SubmitButtonIcon name="arrowright" />
         </SubmitButton>
       </Container>
+
+      <Footer />
     </>
   );
 };
