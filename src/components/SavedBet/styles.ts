@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
-
+import { FontAwesome5 } from "@expo/vector-icons";
 interface ITheme {
   color: string;
 }
@@ -8,6 +8,16 @@ interface ITheme {
 export const Container = styled.View`
   flex-direction: row;
   margin-bottom: ${RFValue(24)}px;
+`;
+
+export const TrashButton = styled.TouchableOpacity`
+  align-self: center;
+  margin-right: ${RFValue(16)}px;
+`;
+
+export const TrashIcon = styled(FontAwesome5)`
+  font-size: ${RFValue(24)}px;
+  color: #868686;
 `;
 
 export const VerticalLine = styled.View<ITheme>`

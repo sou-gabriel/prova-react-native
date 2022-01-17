@@ -2,6 +2,8 @@ import React from "react";
 
 import {
   Container,
+  TrashButton,
+  TrashIcon,
   VerticalLine,
   Content,
   Numbers,
@@ -10,16 +12,29 @@ import {
   GameName,
 } from "./styles";
 
-export const SavedBet = () => {
+interface ISavedBetProps {
+  bet: {
+    color: string;
+    numbers: string;
+    date: string;
+    price: string;
+    type: string;
+  };
+}
+
+export const SavedBet = ({ bet }: ISavedBetProps) => {
   return (
     <Container>
-      <VerticalLine color="#7F3992" />
+      <TrashButton onPress={() => {}}>
+        <TrashIcon name="trash-alt" />
+      </TrashButton>
+      <VerticalLine color={bet.color} />
       <Content>
-        <Numbers>0,3,5,6,8,10,11,13,15,16,17,18,19,20,21</Numbers>
+        <Numbers>{bet.numbers}</Numbers>
         <BetData>
-          <Date>15/01/2022 -</Date> (R$ 2,50)
+          <Date>{bet.date} -</Date> ({bet.price})
         </BetData>
-        <GameName color="#7F3992">Lotofácil</GameName>
+        <GameName color={bet.color}>{bet.type}</GameName>
       </Content>
     </Container>
   );

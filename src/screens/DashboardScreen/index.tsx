@@ -1,5 +1,5 @@
-import React from "react";
-import { ScrollView } from "react-native";
+import React, { useState } from "react";
+import { ScrollView, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
 import { Header } from "../../components/Header";
@@ -8,6 +8,7 @@ import { Footer } from "../../components/Footer";
 import { CardNumber } from "../../components/CardNumber";
 import { AppDispatch, RootState } from "../../store";
 import { setActiveGame } from "../../store/features/activeGame/activeGameSlice";
+import { addBet } from "../../store/features/cart/cartSlice";
 
 import {
   Content,
@@ -18,8 +19,6 @@ import {
   ButtonsContainer,
   Description,
   GameNumberButtonsContainer,
-  GameNumberButton,
-  GameNumberButtonText,
   ActionsContainer,
   PrimaryActionButton,
   PrimaryActionButtonText,
@@ -47,7 +46,7 @@ export const DashboardScreen = () => {
   const games = useSelector(
     (state: RootState) => state.listGames as IListGames
   );
-  const { type, description, range, color, max_number } = useSelector(
+  const { type, description, range, color, max_number, price } = useSelector(
     (state: RootState) => state.activeGame as IGameType
   );
   const dispatch = useDispatch<AppDispatch>();
@@ -84,6 +83,50 @@ export const DashboardScreen = () => {
 
   const clearGame = () => {
     setChosenGameNumbers([]);
+  };
+
+  const getPluralOrSinglar = (quantity, plural, singular) =>
+    quantity === 1 ? singular : plural;
+
+  const addToCart = () => {
+    if (chosenGameNumbers.length === max_number) {
+      const chosenGameNumbersCopy = chosenGameNumbers.map(
+        (chosenGameNumber) => chosenGameNumber
+      );
+      const chosenGameNumbersOrdered = chosenGameNumbersCopy.sort(
+        (a, b) => a - b
+      );
+
+      const newBet = {
+        id: String(new Date().getTime()),
+        type,
+        color,
+        numbers: chosenGameNumbersOrdered.join(", "),
+        price: new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(price),
+        date: new Intl.DateTimeFormat("pt-BR").format(new Date()),
+      };
+      dispatch(addBet(newBet));
+      clearGame();
+      return;
+    }
+
+    const remainingNumbers = max_number - chosenGameNumbers.length;
+
+    Alert.alert(
+      "Não foi possível adicionar o jogo ao carrinho",
+      `Ainda restam ${remainingNumbers} ${getPluralOrSinglar(
+        remainingNumbers,
+        "numeros",
+        "numero"
+      )} a ${getPluralOrSinglar(
+        remainingNumbers,
+        "serem",
+        "ser"
+      )} ${getPluralOrSinglar(remainingNumbers, "selecionados", "selecionado")}`
+    );
   };
 
   return (
@@ -162,7 +205,7 @@ export const DashboardScreen = () => {
             <PrimaryActionButtonText>Clear Game</PrimaryActionButtonText>
           </PrimaryActionButton>
 
-          <SecondaryActionButton onPress={() => {}}>
+          <SecondaryActionButton onPress={addToCart}>
             <Icon name="cart-outline" />
             <SecondaryActionButtonText>Add to Cart</SecondaryActionButtonText>
           </SecondaryActionButton>
