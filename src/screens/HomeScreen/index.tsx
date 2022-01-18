@@ -114,7 +114,7 @@ export const HomeScreen = () => {
 
             <UserBetListContainer style={{ flex: 1, marginTop: 16 }}>
               {allBets.length === 0 ? (
-                <Empty message="Não há jogos salvos" />
+                <Empty message="A lista de jogos está vazia!" />
               ) : (
                 <FlatList
                   data={allBets}
