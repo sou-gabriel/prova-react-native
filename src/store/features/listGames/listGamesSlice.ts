@@ -17,7 +17,10 @@ interface IListGames {
 
 export const listGamesSlice = createSlice({
   name: "listGames",
-  initialState: {},
+  initialState: {
+    min_cart_value: null,
+    types: [],
+  },
   reducers: {
     setListGames: (state, action: PayloadAction<IListGames>) => {
       state = action.payload;

@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
-import { Header } from "../../components/Header";
-import { GameTypeButton } from "../../components/GameTypeButton";
-import { Empty } from "../../components/Empty";
-import { Footer } from "../../components/Footer";
-import { AppDispatch, RootState } from "../../store";
-import { listGames } from "../../shared/services/games";
-import { showError } from "../../shared/functions";
-import { setListGames } from "../../store/features/listGames/listGamesSlice";
-import { setActiveGame } from "../../store/features/activeGame/activeGameSlice";
+import { Header, GameTypeButton, Empty, Footer, UserBet } from "@components";
+import { listGames } from "@shared/services/games";
+import { showError } from "@shared/functions";
+import { fetchAllBets } from "@shared/services/bets";
+import { setListGames } from "@store/features/listGames/listGamesSlice";
+import { setActiveGame } from "@store/features/activeGame/activeGameSlice";
+import { AppDispatch, RootState } from "@store/index";
 
 import {
   Content,
@@ -18,7 +16,7 @@ import {
   Title,
   FiltersContainer,
   GameFiltersButtonsContainer,
-  SavedBetsContainer,
+  UserBetListContainer,
 } from "./styles";
 
 interface IGameType {
@@ -35,6 +33,16 @@ interface IListGames {
   min_cart_value: number;
   types: IGameType[];
 }
+interface IBet {
+  created_at: string;
+  choosen_numbers: string;
+  game_id: number;
+  id: number;
+  price: number;
+  type: {
+    type: string;
+  };
+}
 
 export const HomeScreen = () => {
   const games = useSelector(
@@ -42,6 +50,8 @@ export const HomeScreen = () => {
   );
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(true);
+  const [allBets, setAllBets] = useState<IBet[]>([]);
+  const [activeGames, setActiveGames] = useState<IGameType[]>([]);
 
   useEffect(() => {
     const fetchListGames = async () => {
@@ -59,8 +69,31 @@ export const HomeScreen = () => {
       }
     };
 
+    const fetchSavedBets = async () => {
+      const response = await fetchAllBets();
+      setAllBets(response.data);
+      setIsLoading(false);
+    };
+
     fetchListGames();
+    fetchSavedBets();
   }, []);
+
+  useEffect(() => {
+    if (activeGames.length > 0) {
+      const queryParams = activeGames.reduce((acc, { type }, index) => {
+        if (index === 0) {
+          return `?type%5B%5D=${type}`;
+        }
+
+        return `${acc}&type%5B%5D=${type}`;
+      }, "");
+
+      fetchAllBets(queryParams).then(({ data }) => {
+        setAllBets(data);
+      });
+    }
+  }, [activeGames]);
 
   return (
     <>
@@ -78,19 +111,53 @@ export const HomeScreen = () => {
             <FiltersContainer>
               <Title>Filters</Title>
               <GameFiltersButtonsContainer>
-                {games.types.map(({ color, type }) => (
+                {games.types.map(({ color, type, id }) => (
                   <GameTypeButton
+                    key={String(Math.random())}
                     theme={color}
                     title={type}
-                    onPress={() => {}}
+                    onPress={() => {
+                      const game = games.types.find((game) => {
+                        return game.id === id;
+                      });
+
+                      const isTheGameActive = activeGames.some(
+                        (activeGame) => activeGame.id === id
+                      );
+
+                      if (isTheGameActive) {
+                        setActiveGames((prevActiveGames) => {
+                          return prevActiveGames.filter((prevActiveGame) => {
+                            return prevActiveGame.id !== id;
+                          });
+                        });
+                        return;
+                      }
+
+                      setActiveGames((prevActiveGames) => [
+                        ...prevActiveGames,
+                        game,
+                      ]);
+                    }}
+                    isActive={activeGames.some(
+                      (activeGame) => activeGame.id === id
+                    )}
                   />
                 ))}
               </GameFiltersButtonsContainer>
             </FiltersContainer>
 
-            <SavedBetsContainer>
-              <Empty message="Não há jogos salvos" />
-            </SavedBetsContainer>
+            <UserBetListContainer style={{ flex: 1, marginTop: 16 }}>
+              {allBets.length === 0 ? (
+                <Empty message="A lista de jogos está vazia!" />
+              ) : (
+                <FlatList
+                  data={allBets}
+                  key={String(new Date().getTime())}
+                  renderItem={({ item }) => <UserBet bet={item} />}
+                />
+              )}
+            </UserBetListContainer>
           </>
         )}
       </Content>

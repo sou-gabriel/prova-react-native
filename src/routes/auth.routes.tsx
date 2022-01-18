@@ -40,7 +40,6 @@ export const AuthRoutes = () => {
           headerShown: false,
         }}
       />
-      <Screen name="Home" component={HomeScreen} />
     </Navigator>
   );
 };
