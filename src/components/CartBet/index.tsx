@@ -3,8 +3,8 @@ import { View } from "react-native";
 import { useDispatch } from "react-redux";
 import Toast from "react-native-toast-message";
 
-import { removeBet } from "../../store/features/cart/cartSlice";
-import { AppDispatch } from "../../store";
+import { removeBet } from "@store/features/cart/cartSlice";
+import { AppDispatch } from "@store/index";
 
 import {
   Container,

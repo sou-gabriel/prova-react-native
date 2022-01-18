@@ -1,16 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { ScrollView, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import Toast from "react-native-toast-message";
 
-import { Header } from "../../components/Header";
-import { GameTypeButton } from "../../components/GameTypeButton";
-import { Footer } from "../../components/Footer";
-import { CardNumber } from "../../components/CardNumber";
-import { AppDispatch, RootState } from "../../store";
-import { setActiveGame } from "../../store/features/activeGame/activeGameSlice";
-import { addBet } from "../../store/features/cart/cartSlice";
-import { useGame } from "../../shared/hooks/useGame";
+import { Header, GameTypeButton, Footer, CardNumber } from "@components";
+import { AppDispatch, RootState } from "@store/index";
+import { setActiveGame } from "@store/features/activeGame/activeGameSlice";
+import { useGame } from "@shared/hooks/useGame";
 
 import {
   Content,

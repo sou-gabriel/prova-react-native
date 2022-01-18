@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import { getFormattedDate, getFormattedPrice } from "../../shared/functions";
-import { RootState } from "../../store";
+import { getFormattedDate, getFormattedPrice } from "@shared/functions";
+import { RootState } from "@store/index";
 
 import {
   Container,

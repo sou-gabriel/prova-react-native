@@ -5,15 +5,12 @@ import Toast from "react-native-toast-message";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/native";
 
-import { Header } from "../../components/Header";
-import { Empty } from "../../components/Empty";
-import { CartBet } from "../../components/CartBet";
-import { Footer } from "../../components/Footer";
-import { newBet } from "../../shared/services/bets";
-import { showError } from "../../shared/functions";
-import { getFormattedPrice } from "../../shared/functions";
-import { AppDispatch, RootState } from "../../store";
-import { clearCart } from "../../store/features/cart/cartSlice";
+import { Header, Empty, CartBet, Footer } from "@components";
+import { newBet } from "@shared/services/bets";
+import { showError } from "@shared/functions";
+import { getFormattedPrice } from "@shared/functions";
+import { clearCart } from "@store/features/cart/cartSlice";
+import { AppDispatch, RootState } from "@store/index";
 
 import {
   Container,

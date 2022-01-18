@@ -6,13 +6,15 @@ import { ParamListBase } from "@react-navigation/native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
-import { HighlightText } from "../../components/HighlightText";
-import { Input } from "../../components/Form/Input";
-import { SubmitButton } from "../../components/Form/SubmitButton";
-import { RedirectButton } from "../../components/RedirectButton";
-import { Footer } from "../../components/Footer";
-import { changePassword } from "../../shared/services/auth";
-import { showError } from "../../shared/functions";
+import {
+  HighlightText,
+  Input,
+  SubmitButton,
+  RedirectButton,
+  Footer,
+} from "@components";
+import { changePassword } from "@shared/services/auth";
+import { showError } from "@shared/functions";
 
 import { AuthContainer, Title, Form } from "./styles";
 

@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, FlatList } from "react-native";
+import { ActivityIndicator, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
-import { Header } from "../../components/Header";
-import { GameTypeButton } from "../../components/GameTypeButton";
-import { Empty } from "../../components/Empty";
-import { Footer } from "../../components/Footer";
-import { UserBet } from "../../components/UserBet";
-import { listGames } from "../../shared/services/games";
-import {
-  getFormattedPrice,
-  getFormattedDate,
-  showError,
-} from "../../shared/functions";
-import { fetchAllBets } from "../../shared/services/bets";
-import { setListGames } from "../../store/features/listGames/listGamesSlice";
-import { setActiveGame } from "../../store/features/activeGame/activeGameSlice";
-import { AppDispatch, RootState } from "../../store";
+import { Header, GameTypeButton, Empty, Footer, UserBet } from "@components";
+import { listGames } from "@shared/services/games";
+import { showError } from "@shared/functions";
+import { fetchAllBets } from "@shared/services/bets";
+import { setListGames } from "@store/features/listGames/listGamesSlice";
+import { setActiveGame } from "@store/features/activeGame/activeGameSlice";
+import { AppDispatch, RootState } from "@store/index";
 
 import {
   Content,
