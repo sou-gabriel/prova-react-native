@@ -11,3 +11,6 @@ export const getFormattedPrice = (price: number) => {
     currency: "BRL",
   }).format(price);
 };
+
+export const getFormattedDate = (date: Date) =>
+  new Intl.DateTimeFormat("pt-BR").format(date);
