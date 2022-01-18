@@ -104,6 +104,7 @@ export const HomeScreen = () => {
               <GameFiltersButtonsContainer>
                 {games.types.map(({ color, type }) => (
                   <GameTypeButton
+                    key={String(Math.random())}
                     theme={color}
                     title={type}
                     onPress={() => {}}
