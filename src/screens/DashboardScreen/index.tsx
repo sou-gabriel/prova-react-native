@@ -74,7 +74,7 @@ export const DashboardScreen = () => {
           <Subtitle>Choose a game</Subtitle>
 
           <ButtonsContainer>
-            {games.types.map(({ color, type }) => (
+            {games.types.map(({ color, type, id }) => (
               <GameTypeButton
                 key={String(Math.random())}
                 theme={color}
@@ -85,6 +85,7 @@ export const DashboardScreen = () => {
                   );
                   dispatch(setActiveGame(newActiveGame));
                 }}
+                isActive={activeGame.id === id}
               />
             ))}
           </ButtonsContainer>
@@ -96,6 +97,7 @@ export const DashboardScreen = () => {
         <GameNumberButtonsContainer>
           {getCardNumbers().map((gameNumber) => (
             <CardNumber
+              key={String(Math.random())}
               color={activeGame.color}
               number={gameNumber}
               isSelected={chosenNumbers.includes(gameNumber)}
