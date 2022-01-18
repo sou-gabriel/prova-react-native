@@ -2,11 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface IBet {
   id: string;
-  color: string;
-  numbers: string;
+  game_id: number;
   type: string;
+  color: string;
+  numbers: number[];
+  price: number;
   date: string;
-  price: string;
 }
 
 interface IBetToRemove {
@@ -33,9 +34,13 @@ export const cartSlice = createSlice({
       state.bets = state.bets.filter((bet) => bet.id !== action.payload.id);
       return state;
     },
+    clearCart(state) {
+      state.bets = [];
+      return state;
+    },
   },
 });
 
-export const { addBet, removeBet } = cartSlice.actions;
+export const { addBet, removeBet, clearCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

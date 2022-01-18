@@ -24,16 +24,13 @@ export const Title = styled.Text`
   font-size: ${RFValue(24)}px;
 `;
 
-export const FiltersContainer = styled.View`
-  /* background-color: green; */
-`;
+export const FiltersContainer = styled.View``;
 
 export const GameFiltersButtonsContainer = styled.View`
   flex-direction: column;
 `;
 
-export const SavedBetsContainer = styled.View`
-  margin-top: ${RFValue(24)}px;
+export const UserBetListContainer = styled.View`
   flex: 1;
-  justify-content: center;
+  margin-top: ${RFValue(16)}px;
 `;

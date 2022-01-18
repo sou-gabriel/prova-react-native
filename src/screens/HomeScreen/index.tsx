@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator } from "react-native";
+import { View, Text, ActivityIndicator, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
 import { Header } from "../../components/Header";
 import { GameTypeButton } from "../../components/GameTypeButton";
 import { Empty } from "../../components/Empty";
 import { Footer } from "../../components/Footer";
-import { AppDispatch, RootState } from "../../store";
+import { UserBet } from "../../components/UserBet";
 import { listGames } from "../../shared/services/games";
-import { showError } from "../../shared/functions";
+import {
+  getFormattedPrice,
+  getFormattedDate,
+  showError,
+} from "../../shared/functions";
+import { fetchAllBets } from "../../shared/services/bets";
 import { setListGames } from "../../store/features/listGames/listGamesSlice";
 import { setActiveGame } from "../../store/features/activeGame/activeGameSlice";
+import { AppDispatch, RootState } from "../../store";
 
 import {
   Content,
@@ -18,7 +24,7 @@ import {
   Title,
   FiltersContainer,
   GameFiltersButtonsContainer,
-  SavedBetsContainer,
+  UserBetListContainer,
 } from "./styles";
 
 interface IGameType {
@@ -35,6 +41,16 @@ interface IListGames {
   min_cart_value: number;
   types: IGameType[];
 }
+interface IBet {
+  created_at: string;
+  choosen_numbers: string;
+  game_id: number;
+  id: number;
+  price: number;
+  type: {
+    type: string;
+  };
+}
 
 export const HomeScreen = () => {
   const games = useSelector(
@@ -42,6 +58,7 @@ export const HomeScreen = () => {
   );
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(true);
+  const [allBets, setAllBets] = useState<IBet[]>([]);
 
   useEffect(() => {
     const fetchListGames = async () => {
@@ -59,7 +76,14 @@ export const HomeScreen = () => {
       }
     };
 
+    const fetchSavedBets = async () => {
+      const response = await fetchAllBets();
+      setAllBets(response.data);
+      setIsLoading(false);
+    };
+
     fetchListGames();
+    fetchSavedBets();
   }, []);
 
   return (
@@ -88,9 +112,17 @@ export const HomeScreen = () => {
               </GameFiltersButtonsContainer>
             </FiltersContainer>
 
-            <SavedBetsContainer>
-              <Empty message="Não há jogos salvos" />
-            </SavedBetsContainer>
+            <UserBetListContainer style={{ flex: 1, marginTop: 16 }}>
+              {allBets.length === 0 ? (
+                <Empty message="Não há jogos salvos" />
+              ) : (
+                <FlatList
+                  data={allBets}
+                  key={String(new Date().getTime())}
+                  renderItem={({ item }) => <UserBet bet={item} />}
+                />
+              )}
+            </UserBetListContainer>
           </>
         )}
       </Content>
