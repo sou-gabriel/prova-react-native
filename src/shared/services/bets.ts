@@ -8,4 +8,5 @@ interface IData {
 export const newBet = (data: IData[]) =>
   api.post("bet/new-bet", { games: data });
 
-export const fetchAllBets = () => api.get("bet/all-bets");
+export const fetchAllBets = (queryParams = "") =>
+  api.get(`bet/all-bets${queryParams}`);

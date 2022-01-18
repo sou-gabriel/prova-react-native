@@ -59,6 +59,7 @@ export const HomeScreen = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(true);
   const [allBets, setAllBets] = useState<IBet[]>([]);
+  const [activeGames, setActiveGames] = useState<IGameType[]>([]);
 
   useEffect(() => {
     const fetchListGames = async () => {
@@ -86,6 +87,22 @@ export const HomeScreen = () => {
     fetchSavedBets();
   }, []);
 
+  useEffect(() => {
+    if (activeGames.length > 0) {
+      const queryParams = activeGames.reduce((acc, { type }, index) => {
+        if (index === 0) {
+          return `?type%5B%5D=${type}`;
+        }
+
+        return `${acc}&type%5B%5D=${type}`;
+      }, "");
+
+      fetchAllBets(queryParams).then(({ data }) => {
+        setAllBets(data);
+      });
+    }
+  }, [activeGames]);
+
   return (
     <>
       <Header />
@@ -102,12 +119,37 @@ export const HomeScreen = () => {
             <FiltersContainer>
               <Title>Filters</Title>
               <GameFiltersButtonsContainer>
-                {games.types.map(({ color, type }) => (
+                {games.types.map(({ color, type, id }) => (
                   <GameTypeButton
                     key={String(Math.random())}
                     theme={color}
                     title={type}
-                    onPress={() => {}}
+                    onPress={() => {
+                      const game = games.types.find((game) => {
+                        return game.id === id;
+                      });
+
+                      const isTheGameActive = activeGames.some(
+                        (activeGame) => activeGame.id === id
+                      );
+
+                      if (isTheGameActive) {
+                        setActiveGames((prevActiveGames) => {
+                          return prevActiveGames.filter((prevActiveGame) => {
+                            return prevActiveGame.id !== id;
+                          });
+                        });
+                        return;
+                      }
+
+                      setActiveGames((prevActiveGames) => [
+                        ...prevActiveGames,
+                        game,
+                      ]);
+                    }}
+                    isActive={activeGames.some(
+                      (activeGame) => activeGame.id === id
+                    )}
                   />
                 ))}
               </GameFiltersButtonsContainer>
