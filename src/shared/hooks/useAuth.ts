@@ -31,7 +31,7 @@ type UseAuth = {
 };
 
 export const useAuth = (): UseAuth => {
-  const { token, setToken } = useContext(TokenContext);
+  const { setToken } = useContext(TokenContext);
   const { navigate } = useNavigation<any>();
 
   const storeToken = (token: string) => {
@@ -47,7 +47,6 @@ export const useAuth = (): UseAuth => {
         const token = response.data.token.token;
 
         await storeToken(token);
-        navigate("Home");
       }
     } catch (error) {
       showError(error);
@@ -62,7 +61,6 @@ export const useAuth = (): UseAuth => {
         const token = response.data.token.token;
 
         await storeToken(token);
-        navigate("Home");
       }
     } catch (error) {
       showError(error);
@@ -85,17 +83,7 @@ export const useAuth = (): UseAuth => {
   };
 
   useEffect(() => {
-    const automaticallyConnectUserIfTokenExistsInAsyncStorage = async () => {
-      const tokenFromAsyncStorage = await AsyncStorage.getItem("token");
-      const isThereATokenWithouAsyncStorage = tokenFromAsyncStorage !== null;
-
-      if (isThereATokenWithouAsyncStorage) {
-        await storeToken(token);
-        navigate("Home");
-      }
-    };
-
-    automaticallyConnectUserIfTokenExistsInAsyncStorage();
+    AsyncStorage.getItem("token").then(storeToken);
   }, []);
 
   return {
