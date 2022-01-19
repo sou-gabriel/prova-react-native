@@ -89,9 +89,11 @@ export const useAuth = (): UseAuth => {
   };
 
   useEffect(() => {
-    AsyncStorage.getItem("user").then((user) => {
-      dispatch(addUser(JSON.parse(user)));
-    });
+    AsyncStorage.getItem("user")
+      .then((user) => {
+        dispatch(addUser(JSON.parse(user)));
+      })
+      .catch(showError);
   }, []);
 
   return {

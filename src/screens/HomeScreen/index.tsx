@@ -89,9 +89,11 @@ export const HomeScreen = () => {
         return `${acc}&type%5B%5D=${type}`;
       }, "");
 
-      fetchAllBets(queryParams).then(({ data }) => {
-        setAllBets(data);
-      });
+      fetchAllBets(queryParams)
+        .then(({ data }) => {
+          setAllBets(data);
+        })
+        .catch(showError);
     }
   }, [activeGames]);
 
