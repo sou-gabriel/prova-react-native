@@ -1,16 +1,25 @@
-import { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 import { AuthRoutes } from "./auth.routes";
 import { AppRoutes } from "./app.routes";
-import { TokenContext } from "../shared/context/Token";
+import { RootState } from "@store/index";
+
+interface IUser {
+  name: string;
+  email: string;
+  created_at: string;
+  token: string;
+}
 
 export const Routes = () => {
-  const { token } = useContext(TokenContext);
+  const user = useSelector(
+    (state: RootState) => state.userData as IUser | null
+  );
 
   return (
     <NavigationContainer>
-      {token ? <AppRoutes /> : <AuthRoutes />}
+      {user?.token ? <AppRoutes /> : <AuthRoutes />}
     </NavigationContainer>
   );
 };

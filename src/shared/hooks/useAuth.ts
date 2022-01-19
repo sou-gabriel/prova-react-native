@@ -1,11 +1,13 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
-import { TokenContext } from "../context/Token";
 import { login, resetPassword } from "../services/auth";
 import { createUser } from "../services/user";
 import { showError } from "../functions";
+import { addUser } from "@store/features/userData/userDataSlice";
+import { AppDispatch } from "@store/index";
 
 type LoginData = {
   email: string;
@@ -22,6 +24,13 @@ type DataToRecoverPassword = {
   email: string;
 };
 
+type User = {
+  name: string;
+  email: string;
+  created_at: string;
+  token: string;
+};
+
 type UseAuth = {
   onUserLogin: (loginData: LoginData) => Promise<void>;
   onUserRegister: (registerData: RegisterData) => Promise<void>;
@@ -31,24 +40,23 @@ type UseAuth = {
 };
 
 export const useAuth = (): UseAuth => {
-  const { token, setToken } = useContext(TokenContext);
   const { navigate } = useNavigation<any>();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const storeToken = (token: string) => {
-    AsyncStorage.setItem("token", token);
-    setToken(token);
+  const addNewUser = (user: User) => {
+    AsyncStorage.setItem("user", JSON.stringify(user));
+    dispatch(addUser(user));
   };
 
   const onUserLogin = async (loginData: LoginData) => {
     try {
-      const response = await login(loginData);
-
-      if (response.status === 200) {
-        const token = response.data.token.token;
-
-        await storeToken(token);
-        navigate("Home");
-      }
+      const { data } = await login(loginData);
+      addNewUser({
+        name: data.user.name,
+        email: data.user.email,
+        created_at: data.user.created_at,
+        token: data.token.token,
+      });
     } catch (error) {
       showError(error);
     }
@@ -56,14 +64,13 @@ export const useAuth = (): UseAuth => {
 
   const onUserRegister = async (registerData: RegisterData) => {
     try {
-      const response = await createUser(registerData);
-
-      if (response.status === 200) {
-        const token = response.data.token.token;
-
-        await storeToken(token);
-        navigate("Home");
-      }
+      const { data } = await createUser(registerData);
+      addNewUser({
+        name: data.user.name,
+        email: data.user.email,
+        created_at: data.user.created_at,
+        token: data.token.token,
+      });
     } catch (error) {
       showError(error);
     }
@@ -73,29 +80,19 @@ export const useAuth = (): UseAuth => {
     dataToRecoverPassword: DataToRecoverPassword
   ) => {
     try {
-      const response = await resetPassword(dataToRecoverPassword);
-
-      if (response.status === 200) {
-        const token = response.data.token;
-        navigate("ChangePassword", { token });
-      }
+      const { data } = await resetPassword(dataToRecoverPassword);
+      navigate("ChangePassword", { token: data.token });
     } catch (error) {
       showError(error);
     }
   };
 
   useEffect(() => {
-    const automaticallyConnectUserIfTokenExistsInAsyncStorage = async () => {
-      const tokenFromAsyncStorage = await AsyncStorage.getItem("token");
-      const isThereATokenWithouAsyncStorage = tokenFromAsyncStorage !== null;
-
-      if (isThereATokenWithouAsyncStorage) {
-        await storeToken(token);
-        navigate("Home");
-      }
-    };
-
-    automaticallyConnectUserIfTokenExistsInAsyncStorage();
+    AsyncStorage.getItem("user")
+      .then((user) => {
+        dispatch(addUser(JSON.parse(user)));
+      })
+      .catch(showError);
   }, []);
 
   return {

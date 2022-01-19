@@ -46,7 +46,6 @@ export const GameNumberButtonsContainer = styled.ScrollView.attrs({
     flexDirection: "row",
     flexWrap: "wrap",
     marginBottom: RFValue(16),
-    justifyContent: "space-between",
   },
 })``;
 

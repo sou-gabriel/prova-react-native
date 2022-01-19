@@ -5,7 +5,11 @@ interface ITheme {
   theme: string;
 }
 
-export const Container = styled.TouchableOpacity<ITheme>`
+interface IContainerProps extends ITheme {
+  isActive: boolean;
+}
+
+export const Container = styled.TouchableOpacity<IContainerProps>`
   flex-grow: 1;
   align-items: center;
   margin: ${RFValue(4)}px 0;
@@ -14,10 +18,12 @@ export const Container = styled.TouchableOpacity<ITheme>`
   border-style: solid;
   border-color: ${({ theme }) => theme};
   border-radius: 999px;
+  background-color: ${({ isActive, theme }) =>
+    isActive ? theme : "transparent"};
 `;
 
 export const Text = styled.Text<ITheme>`
   font-weight: bold;
   font-style: italic;
-  color: ${({ theme }) => theme};
+  color: ${({ isActive, theme }) => (isActive ? "#fff" : theme)};
 `;
