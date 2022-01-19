@@ -1,10 +1,27 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Button } from "react-native";
+
+import { Header } from "@components";
 
 export const AccountScreen = () => {
   return (
     <View style={{ justifyContent: "center", alignItems: "center" }}>
-      <Text>Account Screen</Text>
+      <Header />
+      <View>
+        <View>
+          <Text>Logo</Text>
+          <View>
+            <Text>Gabriel Ramos</Text>
+          </View>
+        </View>
+
+        <Button
+          title="Logout"
+          onPress={() => {
+            console.log("Realizar logout do usuário");
+          }}
+        />
+      </View>
     </View>
   );
 };
