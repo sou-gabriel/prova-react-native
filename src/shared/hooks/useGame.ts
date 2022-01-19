@@ -23,7 +23,7 @@ export const useGame = (activeGame: IGame) => {
   const getCardNumbers = () => {
     let cardNumbers: number[] = [];
 
-    for (let cardNumber = 1; cardNumber < activeGame.range; cardNumber++) {
+    for (let cardNumber = 1; cardNumber <= activeGame.range; cardNumber++) {
       cardNumbers.push(cardNumber);
     }
 
