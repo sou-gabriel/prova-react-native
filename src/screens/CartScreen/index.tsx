@@ -17,6 +17,8 @@ import {
   Content,
   Title,
   BetsContainer,
+  CartTotalContainer,
+  LightTitle,
   SubmitButton,
   SubmitButtonText,
   SubmitButtonIcon,
@@ -29,8 +31,10 @@ export const CartScreen = ({
   const bets = useSelector((state: RootState) => state.cart.bets);
   const dispatch = useDispatch<AppDispatch>();
 
+  const getTotalPrice = () => bets.reduce((acc, { price }) => acc + price, 0);
+
   const handleSaveBets = async () => {
-    const totalPrice = bets.reduce((acc, { price }) => acc + price, 0);
+    const totalPrice = getTotalPrice();
 
     if (totalPrice >= min_cart_value) {
       try {
@@ -91,6 +95,14 @@ export const CartScreen = ({
               />
             )}
           </BetsContainer>
+          <CartTotalContainer>
+            <Title>
+              Cart{" "}
+              <LightTitle>
+                total: ${getFormattedPrice(getTotalPrice())}
+              </LightTitle>
+            </Title>
+          </CartTotalContainer>
         </Content>
         <SubmitButton onPress={handleSaveBets}>
           <SubmitButtonText>Save</SubmitButtonText>
