@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 
 import { showError } from "../functions";
 import { addBet } from "../../store/features/cart/cartSlice";
-import { AppDispatch } from "../../store";
+import { AppDispatch, RootState } from "../../store";
 
 interface IGame {
   id: number;
@@ -19,11 +19,12 @@ interface IGame {
 export const useGame = (activeGame: IGame) => {
   const dispatch = useDispatch<AppDispatch>();
   const [chosenNumbers, setChosenNumbers] = useState<number[]>([]);
+  const bets = useSelector((state: RootState) => state.cart.bets);
 
   const getCardNumbers = () => {
     let cardNumbers: number[] = [];
 
-    for (let cardNumber = 1; cardNumber < activeGame.range; cardNumber++) {
+    for (let cardNumber = 1; cardNumber <= activeGame.range; cardNumber++) {
       cardNumbers.push(cardNumber);
     }
 
@@ -78,9 +79,25 @@ export const useGame = (activeGame: IGame) => {
   };
 
   const handleAddToCart = () => {
-    if (chosenNumbers.length === activeGame.max_number) {
-      const newBet = createNewBet();
+    const newBet = createNewBet();
 
+    const isItARepeatBet = bets.some((bet) => {
+      const isItTheSameTypeOfGame = bet.game_id === newBet.game_id;
+      const areTheNumbersChosenTheSame = bet.numbers.every(
+        (number, index) => number === newBet.numbers[index]
+      );
+      return isItTheSameTypeOfGame && areTheNumbersChosenTheSame;
+    });
+
+    if (isItARepeatBet) {
+      Toast.show({
+        type: "error",
+        text1: "Não pode haver jogos repetidos no carrinho!",
+      });
+      return;
+    }
+
+    if (chosenNumbers.length === activeGame.max_number) {
       dispatch(addBet(newBet));
       setChosenNumbers([]);
       Toast.show({

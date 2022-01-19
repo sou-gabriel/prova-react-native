@@ -78,6 +78,8 @@ export const DashboardScreen = () => {
                   const newActiveGame = games.types.find(
                     (gameType) => gameType.type === type
                   );
+
+                  setChosenNumbers([]);
                   dispatch(setActiveGame(newActiveGame));
                 }}
                 isActive={activeGame.id === id}

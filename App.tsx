@@ -7,17 +7,14 @@ import "intl";
 import "intl/locale-data/jsonp/pt-BR";
 
 import { Routes } from "@routes/index";
-import { TokenProvider } from "@shared/context/Token";
 import { store } from "@store/index";
 
 export default function App() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Provider store={store}>
-        <TokenProvider>
-          <Routes />
-          <Toast />
-        </TokenProvider>
+        <Routes />
+        <Toast />
       </Provider>
       <StatusBar style="auto" />
     </SafeAreaView>
