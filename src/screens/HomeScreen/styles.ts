@@ -1,11 +1,6 @@
 import styled from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
-interface IButton {
-  color: string;
-  disabled?: boolean;
-}
-
 export const Content = styled.View`
   padding: 0 ${RFValue(12)}px;
   flex: 1;
@@ -33,4 +28,5 @@ export const GameFiltersButtonsContainer = styled.View`
 export const UserBetListContainer = styled.View`
   flex: 1;
   margin-top: ${RFValue(16)}px;
+  justify-content: center;
 `;
