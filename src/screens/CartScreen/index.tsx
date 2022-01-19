@@ -23,6 +23,7 @@ import {
   SubmitButtonText,
   SubmitButtonIcon,
 } from "./styles";
+import { setSavedBets } from "@store/features/savedBets/savedBetsSlice";
 
 export const CartScreen = ({
   navigation,
@@ -49,6 +50,7 @@ export const CartScreen = ({
           text1: "Apostas salvas sucesso!",
         });
         dispatch(clearCart());
+        dispatch(setSavedBets(transformedBets));
         navigation.navigate("Home");
         return;
       } catch (error) {

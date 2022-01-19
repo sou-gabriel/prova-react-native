@@ -45,6 +45,7 @@ interface IBet {
 }
 
 export const HomeScreen = () => {
+  const savedBets = useSelector((state: RootState) => state.savedBets);
   const games = useSelector(
     (state: RootState) => state.listGames as IListGames
   );
@@ -77,7 +78,7 @@ export const HomeScreen = () => {
 
     fetchListGames();
     fetchSavedBets();
-  }, []);
+  }, [savedBets]);
 
   useEffect(() => {
     if (activeGames.length > 0) {

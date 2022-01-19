@@ -4,6 +4,7 @@ import listGamesReducer from "./features/listGames/listGamesSlice";
 import activeGameReducer from "./features/activeGame/activeGameSlice";
 import cartReducer from "./features/cart/cartSlice";
 import userDataReducer from "./features/userData/userDataSlice";
+import savedBetsSlice from "./features/savedBets/savedBetsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     activeGame: activeGameReducer,
     cart: cartReducer,
     userData: userDataReducer,
+    savedBets: savedBetsSlice,
   },
 });
 
