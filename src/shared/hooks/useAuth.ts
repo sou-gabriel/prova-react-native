@@ -44,7 +44,6 @@ export const useAuth = (): UseAuth => {
   const dispatch = useDispatch<AppDispatch>();
 
   const addNewUser = (user: User) => {
-    console.log(user);
     AsyncStorage.setItem("user", JSON.stringify(user));
     dispatch(addUser(user));
   };
