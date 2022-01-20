@@ -101,7 +101,7 @@ export const CartScreen = ({
             <Title>
               Cart{" "}
               <LightTitle>
-                total: ${getFormattedPrice(getTotalPrice())}
+                total: {getFormattedPrice(getTotalPrice())}
               </LightTitle>
             </Title>
           </CartTotalContainer>
