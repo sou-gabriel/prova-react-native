@@ -49,17 +49,13 @@ export const useAuth = (): UseAuth => {
   };
 
   const onUserLogin = async (loginData: LoginData) => {
-    try {
-      const { data } = await login(loginData);
-      addNewUser({
-        name: data.user.name,
-        email: data.user.email,
-        created_at: data.user.created_at,
-        token: data.token.token,
-      });
-    } catch (error) {
-      showError(error);
-    }
+    const response = await login(loginData);
+    addNewUser({
+      name: response.data.user.name,
+      email: response.data.user.email,
+      created_at: response.data.user.created_at,
+      token: response.data.token.token,
+    });
   };
 
   const onUserRegister = async (registerData: RegisterData) => {
