@@ -39,8 +39,8 @@ export const CartScreen = ({
 
     if (totalPrice >= min_cart_value) {
       try {
-        const transformedBets = bets.map(({ game_id: id, numbers }) => ({
-          id,
+        const transformedBets = bets.map(({ game_id, numbers }) => ({
+          game_id,
           numbers,
         }));
 

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ISavedBet {
-  id: number;
+  game_id: number;
   numbers: number[];
 }
 
