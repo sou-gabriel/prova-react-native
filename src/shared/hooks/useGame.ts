@@ -32,18 +32,18 @@ export const useGame = (activeGame: IGame) => {
   };
 
   const getRandomNumbersWithoutRepetition = () => {
-    const gameNumbers: number[] = [];
+    const newChosenNumbers = [...chosenNumbers]
 
     do {
-      const newGameNumber = Math.round(Math.random() * activeGame.range);
+      const newChosenNumber = Math.round(Math.random() * activeGame.range)
 
-      if (!gameNumbers.includes(newGameNumber)) {
-        gameNumbers.push(newGameNumber);
+      if (!newChosenNumbers.includes(newChosenNumber) && newChosenNumber > 0) {
+        newChosenNumbers.push(newChosenNumber)
       }
-    } while (gameNumbers.length !== activeGame.max_number);
+    } while (newChosenNumbers.length < activeGame.max_number)
 
-    return gameNumbers;
-  };
+    return newChosenNumbers
+  }
 
   const createNewBet = () => {
     const chosenNumbersOrdered = chosenNumbers
