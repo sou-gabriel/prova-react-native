@@ -2,6 +2,7 @@ export { CardNumber } from "./CardNumber";
 export { CartBet } from "./CartBet";
 export { Empty } from "./Empty";
 export { Footer } from "./Footer";
+export { ModalChangeDataAccount } from "./ModalChangeDataAccount";
 export { Input, SubmitButton } from "./Form";
 export { GameTypeButton } from "./GameTypeButton";
 export { Header } from "./Header";

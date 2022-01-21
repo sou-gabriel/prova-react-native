@@ -7,6 +7,11 @@ interface IData {
   token: string | null;
 }
 
+interface INewUserData {
+  email: string
+  name: string
+}
+
 export const userDataSlice = createSlice({
   name: "userData",
   initialState: null,
@@ -19,9 +24,17 @@ export const userDataSlice = createSlice({
       state = null;
       return state;
     },
+    setUserData(state, action: PayloadAction<INewUserData>) {
+      const { email, name } = action.payload
+
+      state.email = email
+      state.name = name
+
+      return state
+    }
   },
 });
 
-export const { addUser, removerUser } = userDataSlice.actions;
+export const { addUser, removerUser, setUserData } = userDataSlice.actions;
 
 export default userDataSlice.reducer;
