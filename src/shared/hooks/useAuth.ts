@@ -8,6 +8,7 @@ import { createUser } from "../services/user";
 import { showError } from "../functions";
 import { addUser } from "@store/features/userData/userDataSlice";
 import { AppDispatch } from "@store/index";
+import { Alert } from "react-native";
 
 type LoginData = {
   email: string;
@@ -78,8 +79,10 @@ export const useAuth = (): UseAuth => {
     try {
       const { data } = await resetPassword(dataToRecoverPassword);
       navigate("ChangePassword", { token: data.token });
-    } catch (error) {
-      showError(error);
+    } catch (error) {      
+      if (error.status === 404) {
+        Alert.alert('Endereço de e-mail não encontrado', 'Insira um endereço de e-mail que já possua cadastro na aplicação')
+      }    
     }
   };
 
