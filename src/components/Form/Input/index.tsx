@@ -5,9 +5,9 @@ import { TextInputProps } from "react-native";
 import { Container, Field, ErrorMessage } from "./styles";
 
 interface IInputProps extends TextInputProps {
-  control: Control;
-  name: string;
-  error: string;
+  control?: Control;
+  name?: string;
+  error?: string;
 }
 
 export const Input = ({ control, name, error, ...rest }: IInputProps) => {
