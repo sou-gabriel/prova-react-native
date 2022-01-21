@@ -54,6 +54,16 @@ export const HomeScreen = () => {
   const [allBets, setAllBets] = useState<IBet[]>([]);
   const [activeGames, setActiveGames] = useState<IGameType[]>([]);
 
+  const getQueryParams = () => {
+    return activeGames.reduce((acc, { type }, index) => {
+      if (index === 0) {
+        return `?type%5B%5D=${type}`;
+      }
+  
+      return `${acc}&type%5B%5D=${type}`;
+    }, "");
+  }
+
   useEffect(() => {
     const fetchListGames = async () => {
       try {
@@ -81,21 +91,10 @@ export const HomeScreen = () => {
   }, [savedBets]);
 
   useEffect(() => {
-    if (activeGames.length > 0) {
-      const queryParams = activeGames.reduce((acc, { type }, index) => {
-        if (index === 0) {
-          return `?type%5B%5D=${type}`;
-        }
-
-        return `${acc}&type%5B%5D=${type}`;
-      }, "");
-
-      fetchAllBets(queryParams)
-        .then(({ data }) => {
-          setAllBets(data);
-        })
-        .catch(showError);
-    }
+    const queryParams = activeGames.length > 0 ? getQueryParams() : ''
+    
+    fetchAllBets(queryParams)
+      .then(({ data }) => setAllBets(data))
   }, [activeGames]);
 
   return (
